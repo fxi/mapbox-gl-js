@@ -7,6 +7,7 @@ import { RGBAImage } from '../util/image';
 import { ImagePosition } from './image_atlas';
 import Texture from './texture';
 import assert from 'assert';
+import { warnOnce } from '../util/util';
 
 import type {StyleImage} from '../style/style_image';
 import type Context from '../gl/context';
@@ -128,6 +129,8 @@ class ImageManager extends Evented {
                     pixelRatio: image.pixelRatio,
                     sdf: image.sdf
                 };
+            } else {
+                warnOnce(`Image "${id}" could not be loaded. Please make sure you have added the image with map.addImage() or a "sprite" property in your style before using it in a layer.`);
             }
         }
 
