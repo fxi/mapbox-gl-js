@@ -1,7 +1,7 @@
 // @flow
 
 import DOM from '../../util/dom';
-import { bezier, bindAll } from '../../util/util';
+import { bezier, bindAll, cssTransformPoint } from '../../util/util';
 import window from '../../util/window';
 import browser from '../../util/browser';
 import { Event } from '../../util/evented';
@@ -116,8 +116,9 @@ class TouchZoomRotateHandler {
         if (!this.isEnabled()) return;
         if (e.touches.length !== 2) return;
 
-        const p0 = DOM.mousePos(this._el, e.touches[0]),
-            p1 = DOM.mousePos(this._el, e.touches[1]),
+        const transformCss = this._map._transformCss;
+        const p0 = cssTransformPoint(DOM.mousePos(this._el, e.touches[0]), transformCss),
+            p1 = cssTransformPoint(DOM.mousePos(this._el, e.touches[1]), transformCss),
             center = p0.add(p1).div(2);
 
         this._startVec = p0.sub(p1);
@@ -130,8 +131,9 @@ class TouchZoomRotateHandler {
     }
 
     _getTouchEventData(e: TouchEvent) {
-        const p0 = DOM.mousePos(this._el, e.touches[0]),
-            p1 = DOM.mousePos(this._el, e.touches[1]);
+        const transformCss = this._map._transformCss;
+        const p0 = cssTransformPoint(DOM.mousePos(this._el, e.touches[0]), transformCss),
+            p1 = cssTransformPoint(DOM.mousePos(this._el, e.touches[1]), transformCss);
 
         const vec = p0.sub(p1);
         return {

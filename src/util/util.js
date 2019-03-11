@@ -467,3 +467,17 @@ export function b64DecodeUnicode(str: string) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); //eslint-disable-line
     }).join(''));
 }
+
+/**
+ * Takes a Mapbox Point and an object of CSS transforms from the Mapbox
+ * constructor options and returns a new Point with those transforms applied.
+ * @param {Point} pos
+ * @param {Object}
+ */
+export function cssTransformPoint(pos: Point, { scale = 1 }: {
+    scale: number | string;
+}): Point {
+    let _pos = pos.clone();
+    if (scale !== 1) _pos = pos.div(scale);
+    return _pos;
+}

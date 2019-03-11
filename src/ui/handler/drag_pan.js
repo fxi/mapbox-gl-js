@@ -1,7 +1,7 @@
 // @flow
 
 import DOM from '../../util/dom';
-import { bezier, bindAll } from '../../util/util';
+import { bezier, bindAll, cssTransformPoint } from '../../util/util';
 import window from '../../util/window';
 import browser from '../../util/browser';
 import { Event } from '../../util/evented';
@@ -145,7 +145,10 @@ class DragPanHandler {
         window.addEventListener('blur', this._onBlur);
 
         this._state = 'pending';
-        this._startPos = this._mouseDownPos = this._lastPos = DOM.mousePos(this._el, e);
+
+        const pos = DOM.mousePos(this._el, e);
+        const transformedPos = cssTransformPoint(pos, this._map._transformCss);
+        this._startPos = this._mouseDownPos = this._lastPos = transformedPos;
         this._inertia = [[browser.now(), this._startPos]];
     }
 
@@ -153,12 +156,13 @@ class DragPanHandler {
         e.preventDefault();
 
         const pos = DOM.mousePos(this._el, e);
-        if (this._lastPos.equals(pos) || (this._state === 'pending' && pos.dist(this._mouseDownPos) < this._clickTolerance)) {
+        const transformedPos = cssTransformPoint(pos, this._map._transformCss);
+        if (this._lastPos.equals(transformedPos) || (this._state === 'pending' && transformedPos.dist(this._mouseDownPos) < this._clickTolerance)) {
             return;
         }
 
         this._lastMoveEvent = e;
-        this._lastPos = pos;
+        this._lastPos = transformedPos;
         this._drainInertiaBuffer();
         this._inertia.push([browser.now(), this._lastPos]);
 

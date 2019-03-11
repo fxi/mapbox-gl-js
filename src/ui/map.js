@@ -65,6 +65,10 @@ type IControl = {
 type ResourceTypeEnum = $Keys<typeof ResourceType>;
 export type RequestTransformFunction = (url: string, resourceType?: ResourceTypeEnum) => RequestParameters;
 
+export type ITransformCss = {
+    scale: string | number;
+}
+
 type MapOptions = {
     hash?: boolean,
     interactive?: boolean,
@@ -94,7 +98,8 @@ type MapOptions = {
     pitch?: number,
     renderWorldCopies?: boolean,
     maxTileCacheSize?: number,
-    transformRequest?: RequestTransformFunction
+    transformRequest?: RequestTransformFunction,
+    transformCss?: ITransformCss,
 };
 
 const defaultMinZoom = 0;
@@ -131,7 +136,11 @@ const defaultOptions = {
     maxTileCacheSize: null,
     transformRequest: null,
     fadeDuration: 300,
-    crossSourceCollisions: true
+    crossSourceCollisions: true,
+
+    transformCss: {
+        scale: 1
+    }
 };
 
 /**
@@ -331,6 +340,7 @@ class Map extends Camera {
         this._renderTaskQueue = new TaskQueue();
         this._controls = [];
         this._mapId = uniqueId();
+        this._transformCss = options.transformCss;
 
         const transformRequestFn = options.transformRequest;
         this._transformRequest = transformRequestFn ?
@@ -938,6 +948,10 @@ class Map extends Camera {
      */
     querySourceFeatures(sourceId: string, parameters: ?{sourceLayer: ?string, filter: ?Array<any>}) {
         return this.style.querySourceFeatures(sourceId, parameters);
+    }
+
+    setTransformCss(transformCss: ITransformCss) {
+        this._transformCss = transformCss;
     }
 
     /**

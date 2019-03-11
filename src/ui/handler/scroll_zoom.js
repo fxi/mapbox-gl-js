@@ -3,7 +3,7 @@
 import assert from 'assert';
 import DOM from '../../util/dom';
 
-import { ease as _ease, bindAll, bezier } from '../../util/util';
+import { ease as _ease, bindAll, bezier, cssTransformPoint } from '../../util/util';
 import browser from '../../util/browser';
 import window from '../../util/window';
 import { number as interpolate } from '../../style-spec/util/interpolate';
@@ -59,7 +59,6 @@ class ScrollZoomHandler {
     constructor(map: Map) {
         this._map = map;
         this._el = map.getCanvasContainer();
-
         this._delta = 0;
 
         bindAll([
@@ -200,8 +199,9 @@ class ScrollZoomHandler {
         }
 
         const pos = DOM.mousePos(this._el, e);
+        const transformedPos = cssTransformPoint(pos, this._map._transformCss);
 
-        this._around = LngLat.convert(this._aroundCenter ? this._map.getCenter() : this._map.unproject(pos));
+        this._around = LngLat.convert(this._aroundCenter ? this._map.getCenter() : this._map.unproject(transformedPos));
         this._aroundPoint = this._map.transform.locationPoint(this._around);
         if (!this._frameId) {
             this._frameId = this._map._requestRenderFrame(this._onScrollFrame);
