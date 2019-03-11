@@ -147,7 +147,7 @@ class DragPanHandler {
         this._state = 'pending';
 
         const pos = DOM.mousePos(this._el, e);
-        const transformedPos = cssTransformPoint(pos, this._map._transformCss);
+        const transformedPos = cssTransformPoint(pos, this._map._cssTransforms);
         this._startPos = this._mouseDownPos = this._lastPos = transformedPos;
         this._inertia = [[browser.now(), this._startPos]];
     }
@@ -156,7 +156,7 @@ class DragPanHandler {
         e.preventDefault();
 
         const pos = DOM.mousePos(this._el, e);
-        const transformedPos = cssTransformPoint(pos, this._map._transformCss);
+        const transformedPos = cssTransformPoint(pos, this._map._cssTransforms);
         if (this._lastPos.equals(transformedPos) || (this._state === 'pending' && transformedPos.dist(this._mouseDownPos) < this._clickTolerance)) {
             return;
         }

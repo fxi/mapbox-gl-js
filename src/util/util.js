@@ -477,6 +477,8 @@ export function b64DecodeUnicode(str: string) {
 export function cssTransformPoint(pos: Point, { scale = 1 }: {
     scale: number | string;
 }): Point {
+    // TODO: eventually we can apply css rotations, etc. For now
+    // only scale is supported
     let _pos = pos.clone();
     if (scale !== 1) _pos = pos.div(scale);
     return _pos;

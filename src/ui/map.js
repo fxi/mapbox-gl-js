@@ -65,7 +65,7 @@ type IControl = {
 type ResourceTypeEnum = $Keys<typeof ResourceType>;
 export type RequestTransformFunction = (url: string, resourceType?: ResourceTypeEnum) => RequestParameters;
 
-export type ITransformCss = {
+export type ICssTransforms = {
     scale: string | number;
 }
 
@@ -99,7 +99,7 @@ type MapOptions = {
     renderWorldCopies?: boolean,
     maxTileCacheSize?: number,
     transformRequest?: RequestTransformFunction,
-    transformCss?: ITransformCss,
+    cssTransforms?: ICssTransforms,
 };
 
 const defaultMinZoom = 0;
@@ -138,7 +138,7 @@ const defaultOptions = {
     fadeDuration: 300,
     crossSourceCollisions: true,
 
-    transformCss: {
+    cssTransforms: {
         scale: 1
     }
 };
@@ -340,7 +340,7 @@ class Map extends Camera {
         this._renderTaskQueue = new TaskQueue();
         this._controls = [];
         this._mapId = uniqueId();
-        this._transformCss = options.transformCss;
+        this._cssTransforms = options.cssTransforms;
 
         const transformRequestFn = options.transformRequest;
         this._transformRequest = transformRequestFn ?
@@ -950,8 +950,10 @@ class Map extends Camera {
         return this.style.querySourceFeatures(sourceId, parameters);
     }
 
-    setTransformCss(transformCss: ITransformCss) {
-        this._transformCss = transformCss;
+    // TODO: is this good enough? There needs to be a way to update
+    // any dynamic changes to the transforms
+    setCssTransforms(cssTransforms: ICssTransforms) {
+        this._cssTransforms = cssTransforms;
     }
 
     /**

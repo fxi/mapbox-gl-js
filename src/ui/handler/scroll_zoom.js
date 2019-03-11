@@ -199,7 +199,7 @@ class ScrollZoomHandler {
         }
 
         const pos = DOM.mousePos(this._el, e);
-        const transformedPos = cssTransformPoint(pos, this._map._transformCss);
+        const transformedPos = cssTransformPoint(pos, this._map._cssTransforms);
 
         this._around = LngLat.convert(this._aroundCenter ? this._map.getCenter() : this._map.unproject(transformedPos));
         this._aroundPoint = this._map.transform.locationPoint(this._around);

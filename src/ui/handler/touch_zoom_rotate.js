@@ -116,9 +116,9 @@ class TouchZoomRotateHandler {
         if (!this.isEnabled()) return;
         if (e.touches.length !== 2) return;
 
-        const transformCss = this._map._transformCss;
-        const p0 = cssTransformPoint(DOM.mousePos(this._el, e.touches[0]), transformCss),
-            p1 = cssTransformPoint(DOM.mousePos(this._el, e.touches[1]), transformCss),
+        const cssTransforms = this._map._cssTransforms;
+        const p0 = cssTransformPoint(DOM.mousePos(this._el, e.touches[0]), cssTransforms),
+            p1 = cssTransformPoint(DOM.mousePos(this._el, e.touches[1]), cssTransforms),
             center = p0.add(p1).div(2);
 
         this._startVec = p0.sub(p1);
@@ -131,9 +131,9 @@ class TouchZoomRotateHandler {
     }
 
     _getTouchEventData(e: TouchEvent) {
-        const transformCss = this._map._transformCss;
-        const p0 = cssTransformPoint(DOM.mousePos(this._el, e.touches[0]), transformCss),
-            p1 = cssTransformPoint(DOM.mousePos(this._el, e.touches[1]), transformCss);
+        const cssTransforms = this._map._cssTransforms;
+        const p0 = cssTransformPoint(DOM.mousePos(this._el, e.touches[0]), cssTransforms),
+            p1 = cssTransformPoint(DOM.mousePos(this._el, e.touches[1]), cssTransforms);
 
         const vec = p0.sub(p1);
         return {

@@ -77,7 +77,7 @@ export class MapMouseEvent extends Event {
      */
     constructor(type: string, map: Map, originalEvent: MouseEvent, data: Object = {}) {
         const point = DOM.mousePos(map.getCanvasContainer(), originalEvent);
-        const transformedPoint = cssTransformPoint(point, map._transformCss);
+        const transformedPoint = cssTransformPoint(point, map._cssTransforms);
         const lngLat = map.unproject(transformedPoint);
         super(type, extend({ transformedPoint, lngLat, originalEvent }, data));
         this._defaultPrevented = false;
@@ -157,7 +157,7 @@ export class MapTouchEvent extends Event {
      */
     constructor(type: string, map: Map, originalEvent: TouchEvent) {
         const points = DOM.touchPos(map.getCanvasContainer(), originalEvent);
-        const transformedPoints = points.map(p => cssTransformPoint(p, map._transformCss));
+        const transformedPoints = points.map(p => cssTransformPoint(p, map._cssTransforms));
         const lngLats = transformedPoints.map((t) => map.unproject(t));
         const point = transformedPoints.reduce((prev, curr, i, arr) => {
             return prev.add(curr.div(arr.length));
